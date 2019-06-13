@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/tealeg/xlsx"
+	"regexp"
 	"strings"
 )
 
@@ -16,6 +17,7 @@ const (
 	preparedFile string = "file.xlsx"
 	notValid bool = false
 	posNotValid bool = false
+	RFC3339FullDate = "2006-01-02"
 )
 
 type arrHelper struct {
@@ -31,10 +33,23 @@ type fileHelper struct {
 	firstDateCol int
 	clientCol int
 	statusCol int
+	fieldsSet bool
 }
 
 func main() {
-	writeNewFile()
+	fmt.Println(IsDate("31/16/19"))
+}
+
+// IsDate returns true when the string is a valid date
+func IsDate(str string) bool {
+
+	s := strings.Split(str, "/")
+	lengh := len(s)
+	year:= s[lengh - 1]
+	fullYear := "20" + year
+	fullDate := strings.Join(append(s[:lengh-1], fullYear),"/")
+	re := regexp.MustCompile("((0?[1-9]|1[012])/0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)")
+	return re.MatchString(fullDate)
 }
 
 func prepareFile() [][]string {
@@ -108,6 +123,7 @@ func (f *fileHelper) setHeaderColumns (str string, col int) {
 	case status:
 		f.statusCol = col
 		f.firstDateCol = col + 1
+		f.fieldsSet = true
 	}
 }
 
@@ -120,7 +136,7 @@ func writeNewFile(){
 	var counter int
 
 	var notValidTurns string = "FERI FERE MALA"
-	var possibleNotValidTurns string = "ORNO AANG"
+	//var possibleNotValidTurns string = "ORNO AANG"
 	var riposo string = "Riposo"
 
 	// create new file
@@ -139,18 +155,19 @@ func writeNewFile(){
 	newFileValues := prepareFile()
 	// set fileHelper
 	f := &fileHelper{}
-	for r, row := range newFileValues {
-		countColumns := len(row)
-		for c, cel := range row {
+	countColumns := len(newFileValues[0])
+
+	// Set file helper
+	for c, cel := range newFileValues[0] {
+		if f.fieldsSet == false {
 			if c <= countColumns {
 				// set header and columns with name department and status col first row of file
-				if r == 0 {
-					f.setHeaderColumns(cel, c)
-				}
+				f.setHeaderColumns(string(cel), c)
 			}
+		} else {
+			break
 		}
 	}
-
 	// counter to add new row
 	counter = 0
 	for r,v := range newFileValues {
