@@ -37,19 +37,7 @@ type fileHelper struct {
 }
 
 func main() {
-	fmt.Println(IsDate("31/16/19"))
-}
 
-// IsDate returns true when the string is a valid date
-func IsDate(str string) bool {
-
-	s := strings.Split(str, "/")
-	lengh := len(s)
-	year:= s[lengh - 1]
-	fullYear := "20" + year
-	fullDate := strings.Join(append(s[:lengh-1], fullYear),"/")
-	re := regexp.MustCompile("((0?[1-9]|1[012])/0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)")
-	return re.MatchString(fullDate)
 }
 
 func prepareFile() [][]string {
@@ -213,6 +201,22 @@ func writeNewFile(){
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
+}
+
+
+// IsDate returns true when the string is a valid date
+func IsDate(str string) bool {
+	var fileDate []string
+	s := strings.Split(str, "/")
+	lengh := len(s)
+	year:= s[lengh - 1]
+	fullYear := "20" + year
+	fileDate = append(fileDate, s[1])
+	fileDate = append(fileDate, s[0])
+	fileDate = append(fileDate, fullYear)
+	fullDate := strings.Join(fileDate,"/")
+	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+	return re.MatchString(fullDate)
 }
 
 
