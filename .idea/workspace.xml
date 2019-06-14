@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9f1f676-2dad-4220-a0f6-ff0b624ad02f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/checkColumnValue.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,20 +20,23 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="530">
-              <caret line="219" column="1" selection-start-line="219" selection-start-column="1" selection-end-line="219" selection-end-column="1" />
+            <state relative-caret-position="289">
+              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
               <folding>
-                <element signature="e#14#68#0" expanded="true" />
+                <element signature="e#14#78#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/checkColumnValue.go">
+        <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="408">
+              <caret line="24" column="35" lean-forward="true" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
+              <folding>
+                <element signature="e#14#60#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -64,6 +69,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/checkColumnValue.go" />
+        <option value="$PROJECT_DIR$/src/main/datetimefunc.go" />
         <option value="$PROJECT_DIR$/src/main/test.go" />
       </list>
     </option>
@@ -142,7 +148,7 @@
     <frame x="704" y="0" width="1219" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.1622088" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.16738568" />
       <window_info id="Structure" order="1" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info id="Favorites" order="2" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -169,17 +175,27 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/checkColumnValue.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="51">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="35" lean-forward="true" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
+          <folding>
+            <element signature="e#14#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="219" column="1" selection-start-line="219" selection-start-column="1" selection-end-line="219" selection-end-column="1" />
+        <state relative-caret-position="289">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
           <folding>
-            <element signature="e#14#68#0" expanded="true" />
+            <element signature="e#14#78#0" expanded="true" />
           </folding>
         </state>
       </provider>

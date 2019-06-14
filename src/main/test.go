@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/tealeg/xlsx"
-	"regexp"
 	"strings"
+	"time"
 )
 
 const (
@@ -17,7 +17,6 @@ const (
 	preparedFile string = "file.xlsx"
 	notValid bool = false
 	posNotValid bool = false
-	RFC3339FullDate = "2006-01-02"
 )
 
 type arrHelper struct {
@@ -37,6 +36,12 @@ type fileHelper struct {
 }
 
 func main() {
+	//tstart := "2019/04/12 18:10:00 UTC"
+	//tend :="2019/04/11 19:10:00 UTC"
+
+	start := time.Date(2019,03,11,10,0,0,0, time.UTC)
+	end := time.Date(2019,03,11,11,0,0,0, time.UTC)
+	fmt.Println(end.Sub(start))
 
 }
 
@@ -124,7 +129,7 @@ func writeNewFile(){
 	var counter int
 
 	var notValidTurns string = "FERI FERE MALA"
-	//var possibleNotValidTurns string = "ORNO AANG"
+	var possibleNotValidTurns string = "ORNO AANG"
 	var riposo string = "Riposo"
 
 	// create new file
@@ -173,19 +178,38 @@ func writeNewFile(){
 					counter = counter + 1
 				} else {
 					if f.firstDateCol >=c {
-						if len(strings.Split(cell.Value, " ")) > 1 {
-							for _, turns := range strings.Split(cell.Value, " ") {
-								if strings.ContainsAny(notValidTurns, turns) {
-									// Search in another cel
-								} else {
-									// Insert turn
+						// insert first turn col
+						if f.firstDateCol == c {
+							if strings.ContainsAny(cell.Value,riposo) {
+								cell.Value = riposo
+								cell = row.AddCell()
+								counter = counter + 1
+							} else {
+								var turnValues [] string
+								for _, turns := range strings.Split(value, " ") {
+									if IsDate(turns) {
+										turnValues = append(turnValues, turns)
+									}
 								}
 							}
-						} else if len(strings.Split(cell.Value, " ")) == 2 {
-							if strings.ContainsAny(riposo, strings.Split(cell.Value, " ")[1]) {
-								// Insert in cel riposo
-							} else {
-								// Insert in cel turn
+						} else {
+							if len(strings.Split(cell.Value, " ")) > 1 {
+								for _, turns := range strings.Split(value, " ") {
+									if strings.ContainsAny(notValidTurns, turns) {
+										// Search in another cel
+
+									} else if strings.ContainsAny(possibleNotValidTurns, turns) {
+										// check hour if is > 0
+									} else {
+										// Insert turn
+									}
+								}
+							} else if len(strings.Split(cell.Value, " ")) == 2 {
+								if strings.ContainsAny(riposo, strings.Split(cell.Value, " ")[1]) {
+									// Insert in cel riposo
+								} else {
+									// Insert in cel turn
+								}
 							}
 						}
 					}
@@ -201,22 +225,6 @@ func writeNewFile(){
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
-}
-
-
-// IsDate returns true when the string is a valid date
-func IsDate(str string) bool {
-	var fileDate []string
-	s := strings.Split(str, "/")
-	lengh := len(s)
-	year:= s[lengh - 1]
-	fullYear := "20" + year
-	fileDate = append(fileDate, s[1])
-	fileDate = append(fileDate, s[0])
-	fileDate = append(fileDate, fullYear)
-	fullDate := strings.Join(fileDate,"/")
-	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
-	return re.MatchString(fullDate)
 }
 
 
