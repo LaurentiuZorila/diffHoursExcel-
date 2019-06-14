@@ -187,12 +187,15 @@ func writeNewFile(){
 							} else {
 								var turnValues [] string
 								for _, turns := range strings.Split(value, " ") {
+									// check if exist [] in string
+
 									if IsDate(turns) {
 										turnValues = append(turnValues, turns)
 									}
 								}
 							}
 						} else {
+							// start to calculate turns
 							if len(strings.Split(cell.Value, " ")) > 1 {
 								for _, turns := range strings.Split(value, " ") {
 									if strings.ContainsAny(notValidTurns, turns) {
@@ -210,6 +213,8 @@ func writeNewFile(){
 								} else {
 									// Insert in cel turn
 								}
+							} else {
+
 							}
 						}
 					}
@@ -224,6 +229,17 @@ func writeNewFile(){
 	err = file.Save(preparedFile)
 	if err != nil {
 		fmt.Printf(err.Error())
+	}
+}
+
+func checkCharacters(str string) string {
+	if strings.Count(str, "[") > 0 || strings.Count(str,"]") > 0 {
+		str = strings.Replace(str, "[", "", 1)
+		str = strings.Replace(str,"]","",1)
+		if strings.Count(str, "(") > 0 {
+			last := strings.Index(str, "(")
+			str = str[0:last]
+		}
 	}
 }
 
