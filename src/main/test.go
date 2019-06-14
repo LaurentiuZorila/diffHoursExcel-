@@ -15,13 +15,10 @@ const (
 	status string = "Stato"
 	validStatus string = "IN FORZA"
 	preparedFile string = "file.xlsx"
-	notValid bool = false
-	posNotValid bool = false
 )
 
 type arrHelper struct {
-	r ,c int
-	allArr [][] string
+	notValid, posNotValid bool
 }
 
 type fileHelper struct {
@@ -185,10 +182,22 @@ func writeNewFile(){
 								cell = row.AddCell()
 								counter = counter + 1
 							} else {
+								// Check if in cel exist not valid turns or possible not valid turns
 								var turnValues [] string
+								validation := arrHelper{}
+								for _, turns := range strings.Split(value, " ") {
+									if strings.ContainsAny(notValidTurns, turns) {
+										validation.notValid = true
+									} else if strings.ContainsAny(possibleNotValidTurns, turns) {
+										if v[c] == 0 {
+											validation.posNotValid = true
+										}
+									}
+								}
+
 								for _, turns := range strings.Split(value, " ") {
 									// check if exist [] in string
-
+									turns = checkCharacters(turns)
 									if IsDate(turns) {
 										turnValues = append(turnValues, turns)
 									}
@@ -241,6 +250,7 @@ func checkCharacters(str string) string {
 			str = str[0:last]
 		}
 	}
+	return  str
 }
 
 
