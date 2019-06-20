@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/tealeg/xlsx"
 	"strings"
-	"time"
 )
 
 const (
@@ -21,6 +20,10 @@ type arrHelper struct {
 	notValid, posNotValid bool
 }
 
+type validTurn struct {
+	turn string
+}
+
 type fileHelper struct {
 	columns int
 	goodTrun int
@@ -33,12 +36,10 @@ type fileHelper struct {
 }
 
 func main() {
-	//tstart := "2019/04/12 18:10:00 UTC"
-	//tend :="2019/04/11 19:10:00 UTC"
-
-	start := time.Date(2019,03,11,10,0,0,0, time.UTC)
-	end := time.Date(2019,03,11,11,0,0,0, time.UTC)
-	fmt.Println(end.Sub(start))
+	//start := time.Date(2019,03,11,10,0,0,0, time.UTC)
+	//end := time.Date(2019,03,11,10,10,10,0, time.UTC)
+	//fmt.Println(end.Sub(start))
+	fmt.Println(checkCharacters("(09:00-17:30(7h))"))
 
 }
 
@@ -125,7 +126,7 @@ func writeNewFile(){
 	var err error
 	var counter int
 
-	var notValidTurns string = "FERI FERE MALA"
+	var notValidTurns string = "FERI FERE MALA FEST"
 	var possibleNotValidTurns string = "ORNO AANG"
 	var riposo string = "Riposo"
 
@@ -174,7 +175,7 @@ func writeNewFile(){
 					cell = row.AddCell()
 					counter = counter + 1
 				} else {
-					if f.firstDateCol >=c {
+					if c >= f.firstDateCol {
 						// insert first turn col
 						if f.firstDateCol == c {
 							if strings.ContainsAny(cell.Value,riposo) {
@@ -184,23 +185,34 @@ func writeNewFile(){
 							} else {
 								// Check if in cel exist not valid turns or possible not valid turns
 								var turnValues [] string
-								validation := arrHelper{}
+								validation := arrHelper{notValid:false, posNotValid:false}
 								for _, turns := range strings.Split(value, " ") {
-									if strings.ContainsAny(notValidTurns, turns) {
+									if strings.Contains(notValidTurns, turns) {
 										validation.notValid = true
-									} else if strings.ContainsAny(possibleNotValidTurns, turns) {
-										if v[c] == 0 {
+									} else if strings.Contains(possibleNotValidTurns, turns) {
+										val := newFileValues[0][c]
+										// check if string is float or int
+										if strings.Contains(val, ",") || strings.Contains(val, ".") {
+											validation.posNotValid = false
+										} else {
 											validation.posNotValid = true
 										}
 									}
 								}
-
-								for _, turns := range strings.Split(value, " ") {
-									// check if exist [] in string
-									turns = checkCharacters(turns)
-									if IsDate(turns) {
-										turnValues = append(turnValues, turns)
+								// if turn is valid get lower time
+								if validation.notValid == false && validation.posNotValid == false {
+									for _, turns := range strings.Split(value, " ") {
+										// check if exist [] in string
+										turns = checkCharacters(turns)
+										if isHour(turns) {
+											t := strings.Split(turns, "-")
+											turnValues = append(turnValues, t[0])
+											turnValues = append(turnValues, t[1])
+										}
+// ************************* Here is need to foreach turn values and get lower time
 									}
+								} else { // get lower time and append turn request
+
 								}
 							}
 						} else {
@@ -249,11 +261,20 @@ func checkCharacters(str string) string {
 			last := strings.Index(str, "(")
 			str = str[0:last]
 		}
+	} else if strings.HasPrefix(str,"(") {
+		if strings.HasSuffix(str,")") {
+			str = strings.Replace(str,")", "", 1)
+		}
+		str = strings.Replace(str,"(", "", 1)
+		if strings.Count(str, "(") > 0 {
+			last := strings.Index(str, "(")
+			str = str[0:last]
+		}
 	}
 	return  str
 }
 
-
+// Check if column "stato" is "in forza"
 func checkArr(arr[]string, col int) bool {
 	if len(arr) > 0 {
 		if arr[col] == validStatus {
@@ -303,18 +324,18 @@ func countFromSheet(cel, row, totCells, header bool, file string) int {
 }
 
 // return array whit 0 values with number columns and number of cells from file
-func arrValues() [][]string {
-	r := countFromSheet(false, true, false, false, excelFileName)
-	c := countFromSheet(true, false, false, false, excelFileName)
-	var lengs = arrHelper{r: r, c: c}
-
-	arr := make([][]string, r)
-	for i := 0; i < lengs.r; i++ {
-		arr[i] = make([]string, lengs.c)
-	}
-	lengs.allArr = arr
-
-	return lengs.allArr
-}
+//func arrValues() [][]string {
+//	r := countFromSheet(false, true, false, false, excelFileName)
+//	c := countFromSheet(true, false, false, false, excelFileName)
+//	var lengs = arrHelper{r: r, c: c}
+//
+//	arr := make([][]string, r)
+//	for i := 0; i < lengs.r; i++ {
+//		arr[i] = make([]string, lengs.c)
+//	}
+//	lengs.allArr = arr
+//
+//	return lengs.allArr
+//}
 
 
