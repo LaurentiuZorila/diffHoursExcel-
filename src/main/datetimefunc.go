@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"regexp"
-	"strconv"
+	"sort"
 	"strings"
 	"time"
 )
@@ -26,21 +26,23 @@ func IsDate(str string) bool {
 }
 
 func isHour(str string) bool {
-	if strings.Contains(str,":") {
+	if strings.Contains(str,":") && !strings.Contains(str, "Turno") {
 		return true
 	}
 	return false
 }
 
-func getLowerValue(arr[]string) string {
-	var firstVal int64
-	for _,v := range arr {
-		t := strings.Split(v,":")
-		timeNumber := t[0] + t[1]
-		if s, err := strconv.ParseInt(timeNumber, 10, 32); err == nil {
-			firstVal = s
-		}
+// return highest or lower value from an array with string values
+func getValueByType(arr[]string, low, hight bool) string {
+	var value string
+	sort.Strings(arr)
+	if low {
+		value = arr[0]
+	} else if hight {
+		l := len(arr)
+		value = arr[l-1]
 	}
+	return value
 }
 
 
@@ -61,10 +63,52 @@ func transformDate(str string) string {
 	fileDate = append(fileDate, fullYear)
 	fileDate = append(fileDate, s[0])
 	fileDate = append(fileDate, s[1])
-	fullDate := strings.Join(fileDate,"-")
+	fullDate := strings.Join(fileDate,"/")
 	//t, _ := time.Parse(layoutISO, fullDate)
 	//return t.Format(layoutUS)
 	return  fullDate
+}
+
+func makeDateAndTime (d, t string) [] string {
+	var dateString []string
+	var timeString []string
+	var dateAndTime [][]string
+	var dateStr string
+	var timeStr string
+	var newTime string
+	var tS string
+	var tS1 string
+	var tS2 string
+
+	t = t + ":00"
+
+	dateString = strings.Split(d,"/")
+	timeString = strings.Split(t,":")
+	if  strings.Index(timeString[0], "0") == 0 && strings.LastIndex(timeString[0],"0") != 1 {
+		//tS = strings.ReplaceAll(timeString[0], "0","")
+		tS = strings.Replace(timeString[0],"0","",1)
+	} else {
+		tS = timeString[0]
+	}
+	if  strings.Index(timeString[1], "0") == 0 && strings.LastIndex(timeString[1],"0") != 1 {
+		//tS1 = strings.ReplaceAll(timeString[0], "0","")
+		tS1 = strings.Replace(timeString[1],"0","",1)
+	} else {
+		tS1 = timeString[1]
+	}
+
+	tS2 = strings.Replace(timeString[2],"0","",1)
+
+	newTime = tS + ":" + tS1 + ":" + tS2 + ":0"
+	timeString = strings.Split(newTime,":")
+
+	dateAndTime = append(dateAndTime,dateString)
+	dateAndTime = append(dateAndTime, timeString)
+	dateStr = strings.Join(dateAndTime[0],",")
+	timeStr = strings.Join(dateAndTime[1],",")
+	aDate := dateStr + "," + timeStr
+	return strings.Split(aDate,",")
+
 }
 
 //ShortDateFromString parse shot date from string

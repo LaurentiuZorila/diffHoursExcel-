@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/tealeg/xlsx"
+	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -39,8 +42,18 @@ func main() {
 	//start := time.Date(2019,03,11,10,0,0,0, time.UTC)
 	//end := time.Date(2019,03,11,10,10,10,0, time.UTC)
 	//fmt.Println(end.Sub(start))
-	fmt.Println(checkCharacters("(09:00-17:30(7h))"))
+	year, _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[0])
+	m , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[1])
+	d , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[2])
+	hh , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[3])
+	mm , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[4])
+	ss , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[5])
+	ns , _ := strconv.Atoi(makeDateAndTime("2019/05/01", "09:30")[6])
 
+	t1 := time.Date(year,m,d,hh,mm,ss,ns,time.UTC)
+	t2 := time.Date(2017, time.February, 16, 0, 0, 0, 0, time.UTC)
+
+	fmt.Println(makeDateAndTime("2019/05/01", "09:30")[0])
 }
 
 func prepareFile() [][]string {
@@ -125,7 +138,7 @@ func writeNewFile(){
 	var cell *xlsx.Cell
 	var err error
 	var counter int
-
+	var request string
 	var notValidTurns string = "FERI FERE MALA FEST"
 	var possibleNotValidTurns string = "ORNO AANG"
 	var riposo string = "Riposo"
@@ -178,7 +191,7 @@ func writeNewFile(){
 					if c >= f.firstDateCol {
 						// insert first turn col
 						if f.firstDateCol == c {
-							if strings.ContainsAny(cell.Value,riposo) {
+							if strings.Contains(value,riposo) {
 								cell.Value = riposo
 								cell = row.AddCell()
 								counter = counter + 1
@@ -186,16 +199,19 @@ func writeNewFile(){
 								// Check if in cel exist not valid turns or possible not valid turns
 								var turnValues [] string
 								validation := arrHelper{notValid:false, posNotValid:false}
+								request = ""
 								for _, turns := range strings.Split(value, " ") {
 									if strings.Contains(notValidTurns, turns) {
+										request = turns
 										validation.notValid = true
 									} else if strings.Contains(possibleNotValidTurns, turns) {
-										val := newFileValues[0][c]
+										val := newFileValues[r][c + 1]
 										// check if string is float or int
-										if strings.Contains(val, ",") || strings.Contains(val, ".") {
+										if isGreatThat0(val) {
 											validation.posNotValid = false
 										} else {
 											validation.posNotValid = true
+											request = turns
 										}
 									}
 								}
@@ -209,39 +225,73 @@ func writeNewFile(){
 											turnValues = append(turnValues, t[0])
 											turnValues = append(turnValues, t[1])
 										}
-// ************************* Here is need to foreach turn values and get lower time
 									}
-								} else { // get lower time and append turn request
+									var dateAndTime []string
+									times := transformDate(newFileValues[0][c]) + " " + getValueByType(turnValues, true, false)
+									dateAndTime = append(dateAndTime, times)
 
+									p := strings.Join(dateAndTime,",")
+									fmt.Println(p)
+									os.Exit(3)
+									fmt.Println(transformDate(newFileValues[0][c]) + " " + getValueByType(turnValues, true, false))
+									os.Exit(3)
+									cell.Value = getValueByType(turnValues, false, true)
+									cell = row.AddCell()
+									counter = counter + 1
+								} else { // get lower time and append turn request
+									cell.Value = getValueByType(turnValues, false, true) + " - " + request
+									cell = row.AddCell()
+									counter = counter + 1
 								}
 							}
 						} else {
-							// start to calculate turns
-							if len(strings.Split(cell.Value, " ")) > 1 {
+							if strings.Contains(value,riposo) {
+								cell.Value = riposo
+								cell = row.AddCell()
+								counter = counter + 1
+							} else {
+								// Check if in cel exist not valid turns or possible not valid turns
+								var turnValues [] string
+								validation := arrHelper{notValid: false, posNotValid: false}
+								request = ""
 								for _, turns := range strings.Split(value, " ") {
-									if strings.ContainsAny(notValidTurns, turns) {
-										// Search in another cel
-
-									} else if strings.ContainsAny(possibleNotValidTurns, turns) {
-										// check hour if is > 0
-									} else {
-										// Insert turn
+									if strings.Contains(notValidTurns, turns) {
+										request = turns
+										validation.notValid = true
+									} else if strings.Contains(possibleNotValidTurns, turns) {
+										val := newFileValues[r][c+1]
+										// check if string is float or int
+										if isGreatThat0(val) {
+											validation.posNotValid = false
+										} else {
+											validation.posNotValid = true
+											request = turns
+										}
 									}
 								}
-							} else if len(strings.Split(cell.Value, " ")) == 2 {
-								if strings.ContainsAny(riposo, strings.Split(cell.Value, " ")[1]) {
-									// Insert in cel riposo
-								} else {
-									// Insert in cel turn
-								}
-							} else {
+								// if turn is valid get lower time
+								if validation.notValid == false && validation.posNotValid == false {
+									for _, turns := range strings.Split(value, " ") {
+										// check if exist [] in string
+										turns = checkCharacters(turns)
+										if isHour(turns) {
+											t := strings.Split(turns, "-")
+											turnValues = append(turnValues, t[0])
+											turnValues = append(turnValues, t[1])
+										}
+									}
+									cell.Value = getValueByType(turnValues, true, false)
+									cell = row.AddCell()
+									counter = counter + 1
 
+								} else { // get lower time and append turn request
+									cell.Value = getValueByType(turnValues, true, false) + " - " + request
+									cell = row.AddCell()
+									counter = counter + 1
+								}
 							}
 						}
 					}
-					cell.Value = value
-					cell = row.AddCell()
-					counter = counter + 1
 				}
 				//fmt.Printf("Counter ===> %d , arrLen ==> %d \n",counter, len(v))
 			}
@@ -251,6 +301,19 @@ func writeNewFile(){
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
+}
+
+// convert string to int and check if is great that 0
+func isGreatThat0 (str string) bool {
+	s, err := strconv.Atoi(str)
+	if err == nil {
+		if s > 0 {
+			return true
+		} else {
+			return false
+		}
+	}
+	return false
 }
 
 func checkCharacters(str string) string {
