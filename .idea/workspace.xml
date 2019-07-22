@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a9f1f676-2dad-4220-a0f6-ff0b624ad02f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Book1.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Book1.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/datetimefunc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/datetimefunc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/~$Book1.xlsx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +20,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="42" column="55" lean-forward="true" selection-start-line="42" selection-start-column="55" selection-end-line="42" selection-end-column="55" />
+            <state relative-caret-position="368">
+              <caret line="344" column="17" lean-forward="true" selection-start-line="344" selection-start-column="17" selection-end-line="344" selection-end-column="17" />
+              <folding>
+                <element signature="e#14#120#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -31,11 +32,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1751">
-              <caret line="109" column="35" selection-start-line="109" selection-start-column="35" selection-end-line="109" selection-end-column="35" />
-              <folding>
-                <element signature="e#14#68#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="105">
+              <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -55,6 +53,9 @@
       <find>arrValues</find>
       <find>validStatus</find>
       <find>checkArr</find>
+      <find>RFC3339FullDate</find>
+      <find>dateAndTime</find>
+      <find>not f</find>
     </findStrings>
     <replaceStrings>
       <replace>countFromSheet</replace>
@@ -63,7 +64,7 @@
       <dir>C:\Projects\GoLang\testGoLang\src\main</dir>
     </dirStrings>
   </component>
-  <component name="GOROOT" path="C:\Go" />
+  <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -77,9 +78,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="747" />
-    <option name="width" value="1180" />
-    <option name="height" value="1047" />
+    <option name="y" value="23" />
+    <option name="width" value="826" />
+    <option name="height" value="821" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -92,18 +93,22 @@
           <expand>
             <path>
               <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="diffHoursExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="diffHoursExcel-" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="diffHoursExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="diffHoursExcel-" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="diffHoursExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="diffHoursExcel-" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -150,9 +155,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="747" y="0" width="1180" height="1047" extended-state="0" />
+    <frame x="0" y="23" width="826" height="821" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.17321429" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.038265307" />
       <window_info id="Structure" order="1" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info id="Favorites" order="2" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -165,7 +171,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.33260393" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.29903978" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -178,19 +184,19 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/checkColumnValue.go" />
-    <entry file="file://$PROJECT_DIR$/src/main/test.go">
+    <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="42" column="55" lean-forward="true" selection-start-line="42" selection-start-column="55" selection-end-line="42" selection-end-column="55" />
+        <state relative-caret-position="105">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
+    <entry file="file://$PROJECT_DIR$/src/main/test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1751">
-          <caret line="109" column="35" selection-start-line="109" selection-start-column="35" selection-end-line="109" selection-end-column="35" />
+        <state relative-caret-position="368">
+          <caret line="344" column="17" lean-forward="true" selection-start-line="344" selection-start-column="17" selection-end-line="344" selection-end-column="17" />
           <folding>
-            <element signature="e#14#68#0" expanded="true" />
+            <element signature="e#14#120#0" expanded="true" />
           </folding>
         </state>
       </provider>
