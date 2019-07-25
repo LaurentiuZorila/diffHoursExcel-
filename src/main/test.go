@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/tealeg/xlsx"
-	_"os"
-	"strconv"
+
 	"strings"
 	"time"
 )
@@ -20,7 +19,7 @@ const (
 	preparedFile string = "file1.xlsx"
 )
 
-type arrHelper struct {
+type celValue struct {
 	notValid, posNotValid bool
 }
 
@@ -40,15 +39,17 @@ type fileHelper struct {
 }
 
 func main() {
+	green := color.New(color.FgRed)
+	green.Print("Enter text: ")
+	var fileName string
+	fmt.Scanln(&fileName)
 
-	//t1 := "2019/05/01 09:30:00"
-	//t2 := "2019/05/01 11:30:00"
-	//diff := diffHours(t1,t2).Hours()
-	//if diff > 1 {
-	//	fmt.Println("great")
-	//}
-	//fmt.Println(diff)
-	writeNewFile()
+	if len(fileName) == 0 {
+		red := color.New(color.FgRed)
+		red.Println("Enter your file name....")
+		red.Println("Exit!")
+	}
+	//writeNewFile()
 }
 
 func prepareFile() [][]string {
@@ -100,17 +101,7 @@ func prepareFile() [][]string {
 	return arr
 }
 
-// Contains tells whether a contains x.
-func Contains(str string) bool {
-	var columnsName = []string {"Nome","Sottocommessa", "Cliente"}
-	for _, n := range columnsName {
-		if str == n {
-			return true
-		}
-	}
-	return false
-}
-
+// Set index for name department client and status col
 func (f *fileHelper) setHeaderColumns (str string, col int) {
 	switch str {
 	case colName:
@@ -126,19 +117,16 @@ func (f *fileHelper) setHeaderColumns (str string, col int) {
 	}
 }
 
+// Write new file
 func writeNewFile(){
 	var file *xlsx.File
 	var sheet *xlsx.Sheet
 	var row *xlsx.Row
 	var cell *xlsx.Cell
 	var err error
-	var counter int
 	var request string
-	var notValidTurns string = "FERI FERE MALA FEST"
-	var possibleNotValidTurns string = "ORNO AANG"
-	var riposo string = "Riposo"
 	var goodTurn string
-	var arrLength int
+	var countColumns int
 
 	// create new file
 	file = xlsx.NewFile()
@@ -148,15 +136,11 @@ func writeNewFile(){
 		fmt.Printf(err.Error())
 	}
 
-	// add row and cell
-	row = sheet.AddRow()
-	cell = row.AddCell()
-
 	// array with specific columns
 	newFileValues := prepareFile()
 	// set fileHelper
 	f := &fileHelper{}
-	countColumns := len(newFileValues[0])
+	countColumns = len(newFileValues[0])
 
 	// Set file helper
 	for c, cel := range newFileValues[0] {
@@ -166,232 +150,122 @@ func writeNewFile(){
 				f.setHeaderColumns(string(cel), c)
 			}
 		}
-		break
 	}
 
-	counter = 0
+
 	// Start foreach array with all cells values from file
 	for roW, columns := range newFileValues {
-		// set length off array on first row (always all cells are completed)
-		arrLength = len(columns[0])
-
-		// check if exists values in row and continue
+		// add row and cell
+		row = sheet.AddRow()
+		// if exist values in array
 		if len(columns) == 0 {
 			continue
 		}
 
-		// foreach columns to get cel index => values
-		for indx, value := range columns  {
-			// if counter greater or equal with number off columns add new row
-			if counter == arrLength {
-				row = sheet.AddRow()
+		for indx, value := range columns {
+			// if header ad only values
+			if roW == 0 && checkValidColumns(value) {
 				cell = row.AddCell()
-				counter = 0
-			}
-
-			// check if row == 0 and set add in new file cells value with no changes
-			if roW == 0 {
 				cell.Value = value
-				cell = row.AddCell()
-				counter = counter + 1
-				red := color.New(color.FgRed)
-				red.Printf("Cel value is =====> %s   - and counter is %d \n", value, counter)
 				continue
 			}
-
-			// if cell number is less that first date column
+			// insert values without changes these are first columns form file (name, id, department ...)
 			if indx < f.firstDateCol {
-				fmt.Println("c < f.firstDateCol")
-				cell.Value = value
 				cell = row.AddCell()
-				counter = counter + 1
-				continue
+				cell.Value = value
 			}
 
-			// if cell number is equal with first date cel add value
-			if f.firstDateCol == indx {
-				// if cel value contains "Riposo" add cel value
-				if strings.Contains(value, riposo) {
-					cell.Value = riposo
+			// insert values form with some changes
+			if indx >= f.firstDateCol && checkValidColumns(newFileValues[0][indx]) {
+
+				// add riposo value contains Riposo
+				if hasBreak(value) {
 					cell = row.AddCell()
-					counter = counter + 1
+					cell.Value = "Riposo"
 					continue
 				}
 
-				// if value is empty add default value
-				if len(strings.TrimSpace(value)) == 0 {
-					cell.Value = "Not Found Turn"
+				// if is empty value
+				if isEmptyString(value) {
 					cell = row.AddCell()
-					counter = counter + 1
+					cell.Value = "Not found turn"
 					continue
 				}
 
-				// check if exist NOT VALID TURNS or POSSIBLE NOT FOUND TUNS
-				if strings.Contains(value,riposo) && len(strings.TrimSpace(value)) == 0 {
-					var turnValues [] string
-					validation := arrHelper{notValid:false, posNotValid:false}
-					request = ""
-
-					// Split value and check if is a valid turn
+				// if exist value and string don't contains "Break"
+				var turnValues [] string
+				if !hasBreak(value) && !isEmptyString(value) {
+					validation := celValue{notValid:false, posNotValid:false}
+					// check if value is valid to calculate
 					for _, turns := range strings.Split(value, " ") {
-						// if cel value contains not valid turns "FERI MALA ...."
-						if strings.Contains(notValidTurns, turns) {
-							request = turns
+						if isNotValidTurn (turns) {
 							validation.notValid = true
-							continue
 						}
-
-						// if cel value contains not valid turns "AANG ORMA ...."
-						if strings.Contains(possibleNotValidTurns,turns) {
-							// Value of next array value
-							val := newFileValues[roW][indx + 1]
-							// Check if value is great that zero
-							if isGreatThat0(val) {
-								validation.posNotValid = false
-							} else {
-								validation.posNotValid = true
-								request = turns
-							}
+						if isPossibleNotValidTurn(turns, newFileValues[roW][indx + 1]) {
+							validation.posNotValid = true
+							request = turns
 						}
 					}
 
-					// if value is a valid turn get highest time
+					// if validation passed
 					if validation.notValid == false && validation.posNotValid == false {
 						for _, turns := range strings.Split(value, " ") {
-							// remove all brackets from value
 							turns = removeBrackets(turns)
-							// if value is hour and not contains Riposo get first and second time
+							// append all hours to array
 							if isHour(turns) {
 								t := strings.Split(turns, "-")
 								turnValues = append(turnValues, t[0])
 								turnValues = append(turnValues, t[1])
 							}
 						}
-
 						// add cell value with highest time
-						cell.Value = getTurnHour(turnValues,false,true)
 						cell = row.AddCell()
-						counter = counter + 1
 
-						// set good turn
-						var dateAndTime [] string
-						times := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, false,true)
-						// date with highest time "2006/01/02 17:00"
-						dateAndTime = append(dateAndTime, times)
-						goodTurn = strings.Join(dateAndTime, ",")
+						//
+						if indx == f.firstDateCol {
+							cell.Value = getTurnHour(turnValues,false,true)
+							// set good turn
+							var dateAndTime [] string
+							times := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, false,true)
+							// date with highest time "2006/01/02 17:00"
+							dateAndTime = append(dateAndTime, times)
+							goodTurn = strings.Join(dateAndTime, ",")
+							continue
+						}
 
-						continue
+						if indx > f.firstDateCol {
+							var dateAndTime []string
+							var dateAndTimeGoodTurn []string
+
+							times := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, true, false)
+							dateAndTime = append(dateAndTime, times)
+							p := strings.Join(dateAndTime,",")
+							diff := diffHours(goodTurn, p)
+
+							// add cell value with highest time
+							cell.Value = diff.String()
+
+							times1 := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, false, true)
+							dateAndTimeGoodTurn = append(dateAndTimeGoodTurn, times1)
+							p1 := strings.Join(dateAndTimeGoodTurn,times1)
+							goodTurn = p1
+							continue
+						}
 					}
-
-					// get lower time and append turn request
-					cell.Value = getTurnHour(turnValues, false,true) + " " + request
-					cell = row.AddCell()
-					counter = counter + 1
-				}
-				continue
-			}
-
-			// if value == "ORE" continue
-			if !checkValidColumns(newFileValues[0][indx]) {
-				counter += 1
-				continue
-			}
-
-
-			/*
-				if cel is > first date col
-			 */
-
-			// if cel value contains "Riposo" add cel value
-			if strings.Contains(value, riposo) {
-				cell.Value = riposo
-				cell = row.AddCell()
-				counter = counter + 1
-				continue
-			}
-
-			// if value is empty add default value
-			if len(strings.TrimSpace(value)) == 0 {
-				cell.Value = "Not Found Turn"
-				cell = row.AddCell()
-				counter = counter + 1
-				continue
-			}
-
-			var turnValues [] string
-			validation := arrHelper{notValid:false, posNotValid:false}
-			request = ""
-
-			// Split value and check if is a valid turn
-			for _, turns := range strings.Split(value, " ") {
-				// if cel value contains not valid turns "FERI MALA ...."
-				if strings.Contains(notValidTurns, turns) {
-					request = turns
-					validation.notValid = true
 					continue
 				}
 
-				// if cel value contains not valid turns "AANG ORMA ...."
-				if strings.Contains(possibleNotValidTurns,turns) {
-					// Value of next array value
-					val := newFileValues[roW][indx + 1]
-					// Check if value is great that zero
-					if isGreatThat0(val) {
-						validation.posNotValid = false
-					} else {
-						validation.posNotValid = true
-						request = turns
+				// if don't exist value or string contains "Break" add cell with default value
+				if hasBreak(value) || isEmptyString(value) {
+					cell = row.AddCell()
+					// get lower time and append turn request
+					if indx == f.firstDateCol {
+						cell.Value = getTurnHour(turnValues, false, true) + " " + request
 					}
+					cell.Value = getTurnHour(turnValues, true, false) + " " + request
 				}
-			}
-
-			// if value is a valid turn get highest time
-			if validation.notValid == false && validation.posNotValid == false {
-				for _, turns := range strings.Split(value, " ") {
-					// remove all brackets from value
-					turns = removeBrackets(turns)
-					// if value is hour and not contains Riposo get first and second time
-					if isHour(turns) {
-						t := strings.Split(turns, "-")
-						turnValues = append(turnValues, t[0])
-						turnValues = append(turnValues, t[1])
-					}
-				}
-
-
-				var dateAndTime []string
-				var dateAndTimeGoodTurn []string
-
-				times := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, true, false)
-				dateAndTime = append(dateAndTime, times)
-				p := strings.Join(dateAndTime,",")
-				diff := diffHours(goodTurn, p)
-
-				// add cell value with highest time
-				cell.Value = diff.String()
-				cell = row.AddCell()
-				counter = counter + 1
-
-				times1 := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, false, true)
-				dateAndTimeGoodTurn = append(dateAndTimeGoodTurn, times1)
-				p1 := strings.Join(dateAndTimeGoodTurn,times1)
-				goodTurn = p1
-
 				continue
 			}
-
-			for _, turns := range strings.Split(value, " ") {
-				turns = removeBrackets(turns)
-				if isHour(turns) {
-					t := strings.Split(turns, "-")
-					turnValues = append(turnValues, t[0])
-					turnValues = append(turnValues,t[1])
-				}
-			}
-			cell.Value = getTurnHour(turnValues, true,false) + " - " + request
-			cell = row.AddCell()
-			counter += 1
-			continue
 		}
 	}
 
@@ -400,60 +274,6 @@ func writeNewFile(){
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
-}
-
-// convert string to int and check if is great that 0
-func isGreatThat0 (str string) bool {
-	if strings.Contains(str,".") {
-		if s, err := strconv.ParseFloat(str, 32); err == nil {
-			if s > 0 {
-				return true
-			}
-		} else {
-			fmt.Printf("string contains '.' Found errors ======> %s\n", err)
-		}
-	} else {
-		if s, err := strconv.Atoi(str); err == nil {
-			if s > 0 {
-				return true
-			}
-		} else {
-			fmt.Printf("Found errors ======> %s", err)
-		}
-	}
-	return false
-}
-
-// remove all brackets form string
-func removeBrackets(str string) string {
-	if strings.Count(str, "[") > 0 || strings.Count(str,"]") > 0 {
-		str = strings.Replace(str, "[", "", 1)
-		str = strings.Replace(str,"]","",1)
-		if strings.Count(str, "(") > 0 {
-			last := strings.Index(str, "(")
-			str = str[0:last]
-		}
-	} else if strings.HasPrefix(str,"(") {
-		if strings.HasSuffix(str,")") {
-			str = strings.Replace(str,")", "", 1)
-		}
-		str = strings.Replace(str,"(", "", 1)
-		if strings.Count(str, "(") > 0 {
-			last := strings.Index(str, "(")
-			str = str[0:last]
-		}
-	}
-	return  str
-}
-
-// Check if column "stato" is "in forza"
-func checkArr(arr[]string, col int) bool {
-	if len(arr) > 0 {
-		if arr[col] == validStatus {
-			return true
-		}
-	}
-	return false
 }
 
 // return int with total columns, rows or total cells
@@ -501,12 +321,6 @@ func countFromSheet(cel, row, totCells, header bool, file string) int {
 	return value
 }
 
-// check if str contains string "ORE"
-func checkValidColumns (str string) bool {
-	if strings.Contains(strings.ToLower(str), "ore") {
-		return false
-	}
-	return true
-}
+
 
 

@@ -50,7 +50,8 @@ func transformDate(str string) string {
 	fullDate := strings.Join(fileDate,"/")
 	//t, _ := time.Parse(layoutISO, fullDate)
 	//return t.Format(layoutUS)
-	return  fullDate
+
+	return fullDate
 }
 
 func diffHours(start, end string) time.Duration {
