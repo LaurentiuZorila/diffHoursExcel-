@@ -16,15 +16,35 @@ func isHour(str string) bool {
 	return false
 }
 
+// check if string have prefix 01 02 03 04
+func checkNotValidHours (s string) bool {
+	return strings.HasPrefix(s , "00") || strings.HasPrefix(s , "01") || strings.HasPrefix(s , "02") || strings.HasPrefix(s , "03") || strings.HasPrefix(s , "04")
+}
+
+func transformNotValidHour (s string) (string, bool) {
+	if strings.HasPrefix(s,"24") {
+		return strings.Replace(s,"24", "00", 1), true
+	}
+	return s, false
+}
+
+
 // return highest or lower value from an array with string values
 func getTurnHour(arr[]string, low, high bool) string {
 	var value string
 	sort.Strings(arr)
 	if low {
-		value = arr[0]
+		var newArr []string
+		for _, v := range arr {
+			if !checkNotValidHours(v) {
+				newArr = append(newArr, v)
+			}
+		}
+		sort.Strings(newArr)
+		value, _ = transformNotValidHour(newArr[0])
 	} else if high {
 		l := len(arr)
-		value = arr[l-1]
+		value, _ = transformNotValidHour(arr[l-1])
 	}
 	return value + ":00"
 }

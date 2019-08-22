@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/fatih/color"
+	"os"
 	"strconv"
 	"strings"
 )
 
 // check if is a empty string
 func isEmptyString(s string) bool {
+	//return len(strings.TrimSpace(s)) == 0 || strings.Contains(s, "Nessun") || strings.Contains(s, "nessun")
 	if len(strings.TrimSpace(s)) == 0 || strings.Contains(s, "Nessun") || strings.Contains(s, "nessun") {
 		return true
 	}
@@ -16,7 +19,8 @@ func isEmptyString(s string) bool {
 
 // check for word "Riposo"
 func hasBreak(s string) bool {
-	var riposo string = "Riposo"
+	var riposo = "Riposo"
+	//return strings.Contains(s, riposo)
 	if strings.Contains(s,riposo) {
 		return true
 	}
@@ -25,8 +29,9 @@ func hasBreak(s string) bool {
 
 // check if string contains not valid turns
 func isNotValidTurn (s string) bool {
-	var notValidTurns string = "FERI FERE MALA FEST"
+	var notValidTurns = "FERI FERE MALA FEST"
 	s = strings.ToUpper(s)
+	//return strings.Contains(notValidTurns,s)
 	if strings.Contains(notValidTurns, s) {
 		return true
 	}
@@ -35,7 +40,7 @@ func isNotValidTurn (s string) bool {
 
 // check if string contains possible not valid turns
 func isPossibleNotValidTurn (s string, d string) bool {
-	var possibleNotValidTurns string = "ORNO AANG"
+	var possibleNotValidTurns = "ORNO AANG"
 	s = strings.ToUpper(s)
 	if strings.Contains(possibleNotValidTurns,s) {
 		if isGreatThat0(d) {
@@ -48,6 +53,7 @@ func isPossibleNotValidTurn (s string, d string) bool {
 
 // check if str contains string "ORE"
 func checkValidColumns (str string) bool {
+	//return strings.Contains(strings.ToLower(str), "ore")
 	if strings.Contains(strings.ToLower(str), "ore") {
 		return false
 	}
@@ -106,4 +112,42 @@ func isGreatThat0 (str string) bool {
 		}
 	}
 	return false
+}
+
+func runInit () (string, string, bool) {
+	var fileName string
+	var destination string
+	success := color.New(color.FgGreen)
+	danger := color.New(color.FgRed)
+	info := color.New(color.FgHiMagenta)
+
+	info.Print(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ")
+	fmt.Scanln(&fileName)
+	excelFileName := fileName
+
+	info.Print(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ")
+	fmt.Scanln(&destination)
+	destinationPath := destination
+
+	if len(strings.Trim(excelFileName, " ")) == 0 || len(strings.Trim(destinationPath, " ")) == 0 {
+		success.Println(" -> File name or destination path missing, please complete all steps....")
+		return "", "", true
+	} else {
+		_, err := os.Stat(excelFileName)
+		if err == nil {
+			//success.Println(" -> File exists: ", excelFileName)
+			if strings.Contains(destinationPath, "/") && !strings.HasSuffix(destinationPath, "/") {
+				destinationPath = destinationPath + "/"
+			}
+
+			if strings.Contains(destinationPath, "\\") && !strings.HasSuffix(destinationPath, "\\") {
+				destinationPath = destinationPath + "\\"
+			}
+
+			return excelFileName, destinationPath, false
+		} else {
+			danger.Printf(" -> File %s doesn't exists!", fileName)
+			return "", "", true
+		}
+	}
 }
