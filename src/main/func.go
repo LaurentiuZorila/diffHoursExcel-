@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"os"
 	"strconv"
 	"strings"
@@ -117,20 +116,20 @@ func isGreatThat0 (str string) bool {
 func runInit () (string, string, bool) {
 	var fileName string
 	var destination string
-	success := color.New(color.FgGreen)
-	danger := color.New(color.FgRed)
-	info := color.New(color.FgHiMagenta)
 
-	info.Print(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ")
+	//info.Print(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ")
+	infoMsg(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ", true)
 	fmt.Scanln(&fileName)
 	excelFileName := fileName
 
-	info.Print(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ")
+	//info.Print(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ")
+	infoMsg(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ", true)
 	fmt.Scanln(&destination)
 	destinationPath := destination
 
 	if len(strings.Trim(excelFileName, " ")) == 0 || len(strings.Trim(destinationPath, " ")) == 0 {
-		success.Println(" -> File name or destination path missing, please complete all steps....")
+		successMsg(" -> File name or destination path missing, please complete all steps....", true)
+		//success.Println(" -> File name or destination path missing, please complete all steps....")
 		return "", "", true
 	} else {
 		_, err := os.Stat(excelFileName)
@@ -146,7 +145,8 @@ func runInit () (string, string, bool) {
 
 			return excelFileName, destinationPath, false
 		} else {
-			danger.Printf(" -> File %s doesn't exists!", fileName)
+			dangerMsg(" -> File %s doesn't exists! " + fileName, true)
+			//danger.Printf(" -> File %s doesn't exists!", fileName)
 			return "", "", true
 		}
 	}

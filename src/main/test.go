@@ -10,7 +10,6 @@ import (
 )
 
 const (
-
 	colName string = "Nome"
 	colDepartment string = "Sottocommessa"
 	colClient string = "Cliente"
@@ -36,26 +35,30 @@ type fileHelper struct {
 }
 
 func main() {
-
-	//t, _ := time.Parse(layoutISO, fullDate)
-	//return t.Format(layoutUS)
-
 	filePath, destinationPath, initError := runInit()
 	if !initError {
+		var fileName string
 		count := 3000
-		fN := strings.Split(filePath,"/")
-		fileName :=  fN[len(fN) - 1]
-		bar := pb.StartNew(count).Prefix("Searching file... ")
+		if strings.Contains(filePath, "/") {
+			fN := strings.Split(filePath,"/")
+			fileName =  fN[len(fN) - 1]
+		} else if strings.Contains(filePath, "\\") {
+			fN := strings.Split(filePath,"\\")
+			fileName =  fN[len(fN) - 1]
+		}
+
+		magenta := color.New(color.FgHiYellow).SprintFunc()
+		bar := pb.StartNew(count).Prefix(magenta("Searching file... "))
 		bar.ShowCounters = false
 		bar.Format("[->_]")
 		for i := 0; i < count; i++ {
 			bar.Increment()
 			time.Sleep(time.Millisecond)
 		}
-		bar.FinishPrint(" -> File: " + fileName + " has been find")
+		bar.FinishPrint(magenta(" -> File: " + fileName + " has been find"))
 		bar.Finish()
 
-		color.Blue("Starting to prepare new file...")
+		infoMsg("Starting to prepare new file...", true)
 		time.Sleep(2 * time.Second)
 
 		writeNewFile(filePath, destinationPath)
@@ -141,6 +144,7 @@ func writeNewFile(excelFile, destination string) {
 	var goodTurn string
 	var countColumns int
 	var newCount int
+	var newGoodTime string
 
 	// create new file
 	file = xlsx.NewFile()
@@ -179,6 +183,7 @@ func writeNewFile(excelFile, destination string) {
 	// Start foreach array with all cells values from file
 	for roW, columns := range newFileValues {
 		newCount = 0
+		goodTurn = ""
 		// add row and cell
 		if len(columns) > 0 {
 			row = sheet.AddRow()
@@ -259,14 +264,14 @@ func writeNewFile(excelFile, destination string) {
 					cell.SetStyle(footerStyle)
 
 					if newCount == f.firstDateCol {
-						cell.Value = getTurnHour(turnValues,false,true)
+						turnHour, _ := getTurnHour(turnValues, false,true)
+						cell.Value = turnHour
 						// set good turn
 						var dateAndTime [] string
-						times := transformDate(newFileValues[0][newCount]) + " " + getTurnHour(turnValues, false,true)
+						times := transformDate(newFileValues[0][newCount]) + " " + turnHour
 						// date with highest time "2006/01/02 17:00"
 						dateAndTime = append(dateAndTime, times)
 						goodTurn = strings.Join(dateAndTime, ",")
-						//rowGoodTurn = roW
 						continue
 					}
 
@@ -275,18 +280,32 @@ func writeNewFile(excelFile, destination string) {
 							var dateAndTime []string
 							var dateAndTimeGoodTurn []string
 							// set good turn
-							times := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, true, false)
+							turnHour, _ := getTurnHour(turnValues, true, false)
+							// check if hour from good turn is 24:00
+							_, t24 := transformNotValidHour(newGoodTime)
+
+							// make date an hour string
+							times := transformDate(newFileValues[0][indx]) + " " + turnHour
 							dateAndTime = append(dateAndTime, times)
 							p := strings.Join(dateAndTime,",")
 
-							// diff between good turn and current turn
-							diff := diffHours(goodTurn, p)
-
-							if newFileValues[roW][2] == "CUNETE Mihaela" {
-								fmt.Println(" ===> good turn: ", goodTurn, " p: ", p, "      ===> diff: ", diff)
+							// if good turn not exist
+							if len(goodTurn) == 0 {
+								turnHour, _ := getTurnHour(turnValues, false,true)
+								cell.Value = turnHour
+								// set good turn
+								var dateAndTime [] string
+								times := transformDate(newFileValues[0][indx]) + " " + turnHour
+								// date with highest time "2006/01/02 17:00"
+								dateAndTime = append(dateAndTime, times)
+								goodTurn = strings.Join(dateAndTime, ",")
+								continue
 							}
 
-							// if dif is less that 12 add red cell value
+							// diff between good turn and current turn
+							diff := diffHours(goodTurn, p, t24)
+
+							// if diff is less that 12 add red cell value
 							if diff.Hours() < 12 {
 								redFont := xlsx.NewFont(10, "Verdana")
 								redFont.Color = "EC1111"
@@ -306,11 +325,12 @@ func writeNewFile(excelFile, destination string) {
 
 							// add cell value with highest time
 							cell.Value = diff.String()
-
-							times1 := transformDate(newFileValues[0][indx]) + " " + getTurnHour(turnValues, false, true)
+							turnHour, _ = getTurnHour(turnValues, false, true)
+							times1 := transformDate(newFileValues[0][indx]) + " " + turnHour
 							dateAndTimeGoodTurn = append(dateAndTimeGoodTurn, times1)
 							p1 := strings.Join(dateAndTimeGoodTurn,times1)
 							goodTurn = p1
+							newGoodTime = turnHour
 						} else {
 							cell.Value = request
 						}
@@ -326,16 +346,17 @@ func writeNewFile(excelFile, destination string) {
 	}
 
 	// Start progress bar
-	bar := pb.StartNew(barCounter).Prefix("Loading... ")
+	y := color.New(color.FgHiYellow).SprintFunc()
+	bar := pb.StartNew(barCounter).Prefix(y("Loading... "))
 	bar.ShowCounters = false
 	bar.Format("[=>_]")
+	//bar.Format(magenta("[=>_]"))
 	for i := 0; i < barCounter; i++ {
 		bar.Increment()
 		time.Sleep(time.Millisecond)
 	}
 	bar.Finish()
-
-	b := color.New(color.FgBlue, color.Bold).SprintFunc()
+	b := color.New(color.FgHiMagenta, color.Bold).SprintFunc()
 	fmt.Print(" -> File : ", b(preparedFile), " has been created!\n")
 	// Progress bar end
 

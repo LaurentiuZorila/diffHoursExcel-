@@ -3,14 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a9f1f676-2dad-4220-a0f6-ff0b624ad02f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Book1.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/MyXLSXFile.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/datetimefunc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/datetimefunc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/file.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/file1.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/func.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/func.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test1.xlsx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,8 +21,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="269" column="32" lean-forward="true" selection-start-line="269" selection-start-column="32" selection-end-line="269" selection-end-column="32" />
+            <state relative-caret-position="115">
+              <caret line="291" column="53" selection-start-line="291" selection-start-column="53" selection-end-line="291" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/colors.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -35,19 +39,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/func.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="124" column="25" lean-forward="true" selection-start-line="124" selection-start-column="25" selection-end-line="124" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="720">
+              <caret line="150" column="9" lean-forward="true" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
               <folding>
-                <element signature="e#14#51#0" expanded="true" />
+                <element signature="e#14#85#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,6 +70,7 @@
       <find>fmt</find>
       <find>string</find>
       <find>firstDateCol</find>
+      <find>Starting to prepare new file...</find>
     </findStrings>
     <replaceStrings>
       <replace>countFromSheet</replace>
@@ -92,9 +88,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/checkColumnValue.go" />
-        <option value="$PROJECT_DIR$/src/main/func.go" />
-        <option value="$PROJECT_DIR$/src/main/test.go" />
         <option value="$PROJECT_DIR$/src/main/datetimefunc.go" />
+        <option value="$PROJECT_DIR$/src/main/func.go" />
+        <option value="$PROJECT_DIR$/src/main/colors.go" />
+        <option value="$PROJECT_DIR$/src/main/test.go" />
       </list>
     </option>
   </component>
@@ -177,9 +174,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="821" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.17238913" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.17453505" />
       <window_info id="Structure" order="1" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info id="Favorites" order="2" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -219,27 +215,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/func.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="124" column="25" lean-forward="true" selection-start-line="124" selection-start-column="25" selection-end-line="124" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="-212">
+          <caret line="38" column="5" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
           <folding>
             <element signature="e#14#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/func.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="150" column="9" lean-forward="true" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+          <folding>
+            <element signature="e#14#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/colors.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="269" column="32" lean-forward="true" selection-start-line="269" selection-start-column="32" selection-end-line="269" selection-end-column="32" />
+        <state relative-caret-position="115">
+          <caret line="291" column="53" selection-start-line="291" selection-start-column="53" selection-end-line="291" selection-end-column="53" />
         </state>
       </provider>
     </entry>

@@ -21,17 +21,24 @@ func checkNotValidHours (s string) bool {
 	return strings.HasPrefix(s , "00") || strings.HasPrefix(s , "01") || strings.HasPrefix(s , "02") || strings.HasPrefix(s , "03") || strings.HasPrefix(s , "04")
 }
 
+
+//transform hour 24:00 in 00:00 and if is 00:00 make second param true
 func transformNotValidHour (s string) (string, bool) {
 	if strings.HasPrefix(s,"24") {
-		return strings.Replace(s,"24", "00", 1), true
+		str := strings.Replace(s,"24", "00", 1)
+		return str, true
+	} else if strings.HasPrefix(s,"00") {
+		return s, true
+	} else {
+		return s, false
 	}
-	return s, false
 }
 
 
 // return highest or lower value from an array with string values
-func getTurnHour(arr[]string, low, high bool) string {
+func getTurnHour(arr[]string, low, high bool) (string, bool) {
 	var value string
+	var is24 bool
 	sort.Strings(arr)
 	if low {
 		var newArr []string
@@ -41,12 +48,12 @@ func getTurnHour(arr[]string, low, high bool) string {
 			}
 		}
 		sort.Strings(newArr)
-		value, _ = transformNotValidHour(newArr[0])
+		value, is24 = transformNotValidHour(newArr[0])
 	} else if high {
 		l := len(arr)
-		value, _ = transformNotValidHour(arr[l-1])
+		value, is24 = transformNotValidHour(arr[l-1])
 	}
-	return value + ":00"
+	return value + ":00", is24
 }
 
 
@@ -74,10 +81,15 @@ func transformDate(str string) string {
 	return fullDate
 }
 
-func diffHours(start, end string) time.Duration {
+func diffHours(start, end string, t24 bool) time.Duration {
 	t1, _ := time.Parse(RFC3339FullDate, start)
 	t2, _ := time.Parse(RFC3339FullDate, end)
-	diff := t2.Sub(t1)
-	return  diff
+	var diff time.Duration
+	if t24 {
+		diff = t2.Sub(t1.Add(time.Hour * 24))
+	} else {
+		diff = t2.Sub(t1)
+	}
+	return diff
 }
 
