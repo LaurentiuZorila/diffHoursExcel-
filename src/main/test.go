@@ -37,35 +37,54 @@ type fileHelper struct {
 func main() {
 	filePath, destinationPath, initError := runInit()
 	if !initError {
-		var fileName string
+		// file name
+		fileName := fileNameFromPath(filePath)
+		// counter for progress bar
 		count := 3000
-		if strings.Contains(filePath, "/") {
-			fN := strings.Split(filePath,"/")
-			fileName =  fN[len(fN) - 1]
-		} else if strings.Contains(filePath, "\\") {
-			fN := strings.Split(filePath,"\\")
-			fileName =  fN[len(fN) - 1]
-		}
 
-		magenta := color.New(color.FgHiYellow).SprintFunc()
-		bar := pb.StartNew(count).Prefix(magenta("Searching file... "))
+		// yellow color
+		warningColor := color.New(color.FgHiYellow).SprintFunc()
+		bar := pb.StartNew(count).Prefix(warningColor("Searching file... "))
 		bar.ShowCounters = false
+		// bar format
 		bar.Format("[->_]")
+		// loop
 		for i := 0; i < count; i++ {
 			bar.Increment()
 			time.Sleep(time.Millisecond)
 		}
-		bar.FinishPrint(magenta(" -> File: " + fileName + " has been find"))
+		// bar finis msg print
+		bar.FinishPrint(warningColor(" -> File: " + fileName + " has been find"))
 		bar.Finish()
 
 		infoMsg("Starting to prepare new file...", true)
 		time.Sleep(2 * time.Second)
 
+		// make new file
 		writeNewFile(filePath, destinationPath)
 		return
+	} else {
+		// file name
+		fileName := fileNameFromPath(filePath)
+		//counter for progeress bar
+		count := 3000
+		// yellow color
+		info := color.New(color.FgHiYellow).SprintFunc()
+		// red color
+		danger := color.New(color.FgHiRed).SprintFunc()
+		bar := pb.StartNew(count).Prefix(info("Searching file... "))
+		bar.ShowCounters = false
+		// progress bar format
+		bar.Format("[->_]")
+		// loop for progess bar
+		for i := 0; i < count; i++ {
+			bar.Increment()
+			time.Sleep(time.Millisecond)
+		}
+		// msg to print when progress bar finish
+		bar.FinishPrint(danger(" Error: -> ") + "File: " + fileName + " doesn't exists, please check again!")
+		bar.Finish()
 	}
-
-	//writeNewFile(excelFileName)
 }
 
 func prepareFile(excelFileName string) [][]string {

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a9f1f676-2dad-4220-a0f6-ff0b624ad02f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/datetimefunc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/datetimefunc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/func.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/func.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test.go" afterDir="false" />
     </list>
@@ -21,8 +20,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="291" column="53" selection-start-line="291" selection-start-column="53" selection-end-line="291" selection-end-column="53" />
+            <state relative-caret-position="372">
+              <caret line="280" column="48" selection-start-line="280" selection-start-column="48" selection-end-line="280" selection-end-column="48" />
+              <folding>
+                <element signature="e#14#128#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -31,7 +33,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/colors.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
-              <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+              <caret line="30" column="21" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -39,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/func.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="150" column="9" lean-forward="true" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+            <state relative-caret-position="345">
+              <caret line="152" column="5" lean-forward="true" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
               <folding>
                 <element signature="e#14#85#0" expanded="true" />
               </folding>
@@ -71,6 +73,7 @@
       <find>string</find>
       <find>firstDateCol</find>
       <find>Starting to prepare new file...</find>
+      <find>Output</find>
     </findStrings>
     <replaceStrings>
       <replace>countFromSheet</replace>
@@ -89,8 +92,8 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/checkColumnValue.go" />
         <option value="$PROJECT_DIR$/src/main/datetimefunc.go" />
-        <option value="$PROJECT_DIR$/src/main/func.go" />
         <option value="$PROJECT_DIR$/src/main/colors.go" />
+        <option value="$PROJECT_DIR$/src/main/func.go" />
         <option value="$PROJECT_DIR$/src/main/test.go" />
       </list>
     </option>
@@ -127,6 +130,13 @@
             </path>
             <path>
               <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="diffHoursExcel-" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="example file" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="goCalculateHoursFromExcelFile" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
@@ -151,6 +161,11 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/example file" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -174,8 +189,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="821" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.17453505" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.17453505" />
       <window_info id="Structure" order="1" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info id="Favorites" order="2" sideWeight="0.50162864" side_tool="true" weight="0.15185505" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -188,7 +204,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.33607683" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.33607683" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -208,13 +224,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../goLand/src/github.com/cheggaaa/pb/pb.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3034">
-          <caret line="254" column="24" lean-forward="true" selection-start-line="254" selection-start-column="24" selection-end-line="254" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/datetimefunc.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-212">
@@ -225,27 +234,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/colors.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="30" column="21" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/func.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="150" column="9" lean-forward="true" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+        <state relative-caret-position="345">
+          <caret line="152" column="5" lean-forward="true" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
           <folding>
             <element signature="e#14#85#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/colors.go">
+    <entry file="file://$PROJECT_DIR$/../goLand/src/github.com/cheggaaa/pb/pb.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+        <state relative-caret-position="-369">
+          <caret line="249" column="23" selection-start-line="249" selection-start-column="23" selection-end-line="249" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="291" column="53" selection-start-line="291" selection-start-column="53" selection-end-line="291" selection-end-column="53" />
+        <state relative-caret-position="372">
+          <caret line="280" column="48" selection-start-line="280" selection-start-column="48" selection-end-line="280" selection-end-column="48" />
+          <folding>
+            <element signature="e#14#128#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

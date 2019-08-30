@@ -113,6 +113,8 @@ func isGreatThat0 (str string) bool {
 	return false
 }
 
+
+// run init answers
 func runInit () (string, string, bool) {
 	var fileName string
 	var destination string
@@ -128,7 +130,7 @@ func runInit () (string, string, bool) {
 	destinationPath := destination
 
 	if len(strings.Trim(excelFileName, " ")) == 0 || len(strings.Trim(destinationPath, " ")) == 0 {
-		successMsg(" -> File name or destination path missing, please complete all steps....", true)
+		successMsg(" -> File name or destination path missing, please complete all steps!", true)
 		//success.Println(" -> File name or destination path missing, please complete all steps....")
 		return "", "", true
 	} else {
@@ -145,9 +147,22 @@ func runInit () (string, string, bool) {
 
 			return excelFileName, destinationPath, false
 		} else {
-			dangerMsg(" -> File %s doesn't exists! " + fileName, true)
 			//danger.Printf(" -> File %s doesn't exists!", fileName)
-			return "", "", true
+			return excelFileName, destinationPath, true
 		}
 	}
+}
+
+
+// return excel file name from path inserted
+func fileNameFromPath(filePath string) string {
+	var nameOfFile string
+	if strings.Contains(filePath, "/") {
+		fN := strings.Split(filePath,"/")
+		nameOfFile =  fN[len(fN) - 1]
+	} else if strings.Contains(filePath, "\\") {
+		fN := strings.Split(filePath,"\\")
+		nameOfFile =  fN[len(fN) - 1]
+	}
+	return nameOfFile
 }
