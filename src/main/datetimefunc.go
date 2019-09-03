@@ -27,8 +27,6 @@ func transformNotValidHour (s string) (string, bool) {
 	if strings.HasPrefix(s,"24") {
 		str := strings.Replace(s,"24", "00", 1)
 		return str, true
-	} else if strings.HasPrefix(s,"00") {
-		return s, true
 	} else {
 		return s, false
 	}

@@ -120,7 +120,7 @@ func runInit () (string, string, bool) {
 	var destination string
 
 	//info.Print(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ")
-	infoMsg(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ", true)
+	infoMsg(" -> Enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ", true)
 	fmt.Scanln(&fileName)
 	excelFileName := fileName
 

@@ -58,7 +58,6 @@ func main() {
 		bar.Finish()
 
 		infoMsg("Starting to prepare new file...", true)
-		time.Sleep(2 * time.Second)
 
 		// make new file
 		writeNewFile(filePath, destinationPath)
@@ -199,6 +198,13 @@ func writeNewFile(excelFile, destination string) {
 
 	// Start progress bar
 	barCounter := 0
+	//a := 0
+	//for r, c := range newFileValues {
+	//	a += len(c)
+	//	fmt.Println(a)
+	//	fmt.Println(r)
+	//}
+
 	// Start foreach array with all cells values from file
 	for roW, columns := range newFileValues {
 		newCount = 0
@@ -222,6 +228,7 @@ func writeNewFile(excelFile, destination string) {
 					cell.SetStyle(footerStyle)
 					cell.Value = value
 				}
+				barCounter += 1
 				continue
 			}
 
@@ -239,6 +246,7 @@ func writeNewFile(excelFile, destination string) {
 					cell = row.AddCell()
 					cell.SetStyle(footerStyle)
 					cell.Value = "Riposo"
+					barCounter += 1
 					continue
 				}
 
@@ -247,6 +255,7 @@ func writeNewFile(excelFile, destination string) {
 					cell = row.AddCell()
 					cell.SetStyle(footerStyle)
 					cell.Value = "Not found turn"
+					barCounter += 1
 					continue
 				}
 
@@ -291,6 +300,7 @@ func writeNewFile(excelFile, destination string) {
 						// date with highest time "2006/01/02 17:00"
 						dateAndTime = append(dateAndTime, times)
 						goodTurn = strings.Join(dateAndTime, ",")
+						barCounter += 1
 						continue
 					}
 
@@ -318,6 +328,8 @@ func writeNewFile(excelFile, destination string) {
 								// date with highest time "2006/01/02 17:00"
 								dateAndTime = append(dateAndTime, times)
 								goodTurn = strings.Join(dateAndTime, ",")
+								newGoodTime = turnHour
+								barCounter += 1
 								continue
 							}
 
@@ -353,9 +365,11 @@ func writeNewFile(excelFile, destination string) {
 						} else {
 							cell.Value = request
 						}
+						barCounter += 1
 						continue
 					}
 				}
+				barCounter += 1
 				continue
 			}
 			newCount += 1
@@ -366,13 +380,24 @@ func writeNewFile(excelFile, destination string) {
 
 	// Start progress bar
 	y := color.New(color.FgHiYellow).SprintFunc()
-	bar := pb.StartNew(barCounter).Prefix(y("Loading... "))
+	bar := pb.StartNew(barCounter).Prefix(y("Writing new file... "))
 	bar.ShowCounters = false
-	bar.Format("[=>_]")
-	//bar.Format(magenta("[=>_]"))
+	bar.Format("->_")
 	for i := 0; i < barCounter; i++ {
 		bar.Increment()
-		time.Sleep(time.Millisecond)
+		if barCounter <= 10000 {
+			time.Sleep(time.Millisecond)
+		} else if barCounter > 10000 && barCounter <= 100000 {
+			time.Sleep(50 * time.Microsecond)
+		} else if barCounter > 100000 && barCounter <= 500000 {
+			time.Sleep(10 * time.Microsecond)
+		} else if barCounter > 500000 && barCounter <= 1000000 {
+			time.Sleep(5 * time.Microsecond)
+		} else if barCounter > 100000 && barCounter <= 2000000 {
+			time.Sleep(300 * time.Nanosecond)
+		} else {
+			time.Sleep(time.Nanosecond)
+		}
 	}
 	bar.Finish()
 	b := color.New(color.FgHiMagenta, color.Bold).SprintFunc()
