@@ -42,7 +42,7 @@ func main() {
 
 	fileModified := lastDateModified(path() + fileSerialKey)
 	fileKeyLic := readFile(path() + fileSerialKey)
-	fileKeyLic = decodeKey(fileKeyLic)
+	fileKeyLic = decode(fileKeyLic)
 	fileKeyLicArray := strings.Split(fileKeyLic, "___")
 
 	fmt.Println("fileModified -> ", fileModified)
