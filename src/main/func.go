@@ -5,7 +5,10 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
+
+const newValidStatus string = "IN FORZA"
 
 // check if is a empty string
 func isEmptyString(s string) bool {
@@ -62,7 +65,7 @@ func checkValidColumns (str string) bool {
 // Check if column "stato" is "in forza"
 func checkArr(arr[]string, col int) bool {
 	if len(arr) > 0 {
-		if arr[col] == validStatus {
+		if arr[col] == newValidStatus {
 			return true
 		}
 	}
@@ -113,36 +116,68 @@ func isGreatThat0 (str string) bool {
 	return false
 }
 
+func checkAnswers(str string) (string, bool) {
+	result := ""
+
+	messages := [3]string{
+		" -> Enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
+		" -> Please enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
+		" -> MotherFucker insert path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
+	}
+
+	if len(strings.Trim(str, "")) == 0 {
+		counter := 0
+		for {
+			if len(strings.Trim(result, "")) > 0 {
+				break
+			} else {
+				if counter > 2 {
+					return "", true
+				}
+				infoMsg(messages[counter], true)
+				fmt.Scanln(&result)
+			}
+			counter++
+		}
+	}
+	return result, false
+}
+
+func timer(sec int) {
+	ticker := time.Tick(time.Second)
+	for i := sec; i >= 0; i-- {
+		<-ticker
+		fmt.Printf("\rThe program will close in: %d", i)
+	}
+}
+
 
 // run init answers
 func runInit () (string, string, bool) {
 	var fileName string
-	var destination string
 
-	//info.Print(" -> Enter file name and path (ex: C:/user/desktop/etc/file.xlsx): ")
-	infoMsg(" -> Enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ", true)
-	fmt.Scanln(&fileName)
-	excelFileName := fileName
+	excelFileName, errorFileName := checkAnswers(fileName)
 
-	//info.Print(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ")
-	infoMsg(" -> Enter destination path where save new file (ex: C:/user/desktop/etc/): ", true)
-	fmt.Scanln(&destination)
-	destinationPath := destination
-
-	if len(strings.Trim(excelFileName, " ")) == 0 || len(strings.Trim(destinationPath, " ")) == 0 {
-		successMsg(" -> File name or destination path missing, please complete all steps!", true)
-		//success.Println(" -> File name or destination path missing, please complete all steps....")
-		return "", "", true
+	if errorFileName {
+		dangerMsg(" -> File name missing, please complete all steps!", true)
+		timer(5)
+		fmt.Println("\n")
+		return "","", true
 	} else {
+		var destinationPath string
 		_, err := os.Stat(excelFileName)
 		if err == nil {
 			//success.Println(" -> File exists: ", excelFileName)
-			if strings.Contains(destinationPath, "/") && !strings.HasSuffix(destinationPath, "/") {
-				destinationPath = destinationPath + "/"
+			if strings.Contains(excelFileName, "/") && !strings.HasSuffix(excelFileName, "/") {
+				path := strings.Split(excelFileName, "/")
+				path = path[:len(path)-1]
+				destinationPath = strings.Join(path,"/") + "/"
 			}
 
-			if strings.Contains(destinationPath, "\\") && !strings.HasSuffix(destinationPath, "\\") {
-				destinationPath = destinationPath + "\\"
+			if strings.Contains(excelFileName, "\\") && !strings.HasSuffix(excelFileName, "\\") {
+				path := strings.Split(excelFileName, "\\")
+				path = path[:len(path)-1]
+				destinationPath = strings.Join(path, "\\") + "\\"
 			}
 
 			return excelFileName, destinationPath, false
@@ -165,4 +200,23 @@ func fileNameFromPath(filePath string) string {
 		nameOfFile =  fN[len(fN) - 1]
 	}
 	return nameOfFile
+}
+
+
+func inArray(item string, array[]string) bool {
+	for _,v := range array {
+		if v == item {
+			return true
+		}
+	}
+	return false
+}
+
+func inArray2D(str string, arr[][]string) bool {
+	for _, v := range arr {
+		if v[0] == str {
+			return true
+		}
+	}
+	return false
 }

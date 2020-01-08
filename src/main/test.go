@@ -5,6 +5,8 @@ import (
 	"github.com/cheggaaa/pb"
 	"github.com/fatih/color"
 	"github.com/tealeg/xlsx"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -13,9 +15,10 @@ const (
 	colName string = "Nome"
 	colDepartment string = "Sottocommessa"
 	colClient string = "Cliente"
+	colSede string = "Sede"
 	status string = "Stato"
 	validStatus string = "IN FORZA"
-	preparedFile string = "file1.xlsx"
+	preparedFile string = "Errors.xlsx"
 )
 
 type celValue struct {
@@ -30,12 +33,25 @@ type fileHelper struct {
 	firstDateCol int
 	clientCol int
 	statusCol int
+	sedeCol int
 	fieldsSet bool
 	firstDateValue string
 }
 
 func main() {
+
+	fileModified := lastDateModified(path() + fileSerialKey)
+	fileKeyLic := readFile(path() + fileSerialKey)
+	fileKeyLic = decodeKey(fileKeyLic)
+	fileKeyLicArray := strings.Split(fileKeyLic, "___")
+
+	fmt.Println("fileModified -> ", fileModified)
+	fmt.Println("fileKeyLicArray[1] -> ", fileKeyLicArray[1])
+
+
+	os.Exit(3)
 	filePath, destinationPath, initError := runInit()
+
 	if !initError {
 		// file name
 		fileName := fileNameFromPath(filePath)
@@ -63,26 +79,28 @@ func main() {
 		writeNewFile(filePath, destinationPath)
 		return
 	} else {
-		// file name
-		fileName := fileNameFromPath(filePath)
-		//counter for progeress bar
-		count := 3000
-		// yellow color
-		info := color.New(color.FgHiYellow).SprintFunc()
-		// red color
-		danger := color.New(color.FgHiRed).SprintFunc()
-		bar := pb.StartNew(count).Prefix(info("Searching file... "))
-		bar.ShowCounters = false
-		// progress bar format
-		bar.Format("[->_]")
-		// loop for progess bar
-		for i := 0; i < count; i++ {
-			bar.Increment()
-			time.Sleep(time.Millisecond)
+		if len(filePath) > 0 {
+			// file name
+			fileName := fileNameFromPath(filePath)
+			//counter for progeress bar
+			count := 3000
+			// yellow color
+			info := color.New(color.FgHiYellow).SprintFunc()
+			// red color
+			danger := color.New(color.FgHiRed).SprintFunc()
+			bar := pb.StartNew(count).Prefix(info("Searching file... "))
+			bar.ShowCounters = false
+			// progress bar format
+			bar.Format("[->_]")
+			// loop for progess bar
+			for i := 0; i < count; i++ {
+				bar.Increment()
+				time.Sleep(time.Millisecond)
+			}
+			// msg to print when progress bar finish
+			bar.FinishPrint(danger(" Error: -> ") + "File: " + fileName + " doesn't exists, please check again!")
+			bar.Finish()
 		}
-		// msg to print when progress bar finish
-		bar.FinishPrint(danger(" Error: -> ") + "File: " + fileName + " doesn't exists, please check again!")
-		bar.Finish()
 	}
 }
 
@@ -144,6 +162,8 @@ func (f *fileHelper) setHeaderColumns (str string, col int) {
 		f.departCol = col
 	case colClient:
 		f.clientCol = col
+	case colSede:
+		f.sedeCol = col
 	case status:
 		f.statusCol = col
 		f.firstDateCol = col + 1
@@ -155,8 +175,11 @@ func (f *fileHelper) setHeaderColumns (str string, col int) {
 func writeNewFile(excelFile, destination string) {
 	var file *xlsx.File
 	var sheet *xlsx.Sheet
+	var sheet1 *xlsx.Sheet
 	var row *xlsx.Row
+	var row1 *xlsx.Row
 	var cell *xlsx.Cell
+	var cell1 *xlsx.Cell
 	var err error
 	var request string
 	var goodTurn string
@@ -167,7 +190,7 @@ func writeNewFile(excelFile, destination string) {
 	// create new file
 	file = xlsx.NewFile()
 	// add new sheet
-	sheet, err = file.AddSheet("Sheet1")
+	sheet, err = file.AddSheet("All turns and errors")
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
@@ -198,12 +221,9 @@ func writeNewFile(excelFile, destination string) {
 
 	// Start progress bar
 	barCounter := 0
-	//a := 0
-	//for r, c := range newFileValues {
-	//	a += len(c)
-	//	fmt.Println(a)
-	//	fmt.Println(r)
-	//}
+
+	var allErrors [][]string
+
 
 	// Start foreach array with all cells values from file
 	for roW, columns := range newFileValues {
@@ -241,6 +261,11 @@ func writeNewFile(excelFile, destination string) {
 
 			// insert values form with some changes
 			if newCount >= f.firstDateCol && checkValidColumns(newFileValues[0][indx]) {
+				// get city, department and client names from file
+				rowCityName := strings.ToUpper(strings.TrimSpace(newFileValues[roW][f.sedeCol]))
+				rowDepartName := strings.ToUpper(strings.TrimSpace(newFileValues[roW][f.clientCol]))
+				rowSottName := strings.ToUpper(strings.TrimSpace(newFileValues[roW][f.departCol]))
+
 				// add riposo value contains Riposo
 				if hasBreak(value) {
 					cell = row.AddCell()
@@ -335,23 +360,64 @@ func writeNewFile(excelFile, destination string) {
 
 							// diff between good turn and current turn
 							diff := diffHours(goodTurn, p, t24)
-
+							var rowErrors []string
 							// if diff is less that 12 add red cell value
 							if diff.Hours() < 12 {
 								redFont := xlsx.NewFont(10, "Verdana")
-								redFont.Color = "EC1111"
+								redFont.Color = "FF0000"
 								redStyle := xlsx.NewStyle()
 								redStyle.Font = *redFont
 								cell.SetStyle(redStyle)
+
+								errorsTableDepartments := rowCityName + " - " + rowDepartName + " - " + rowSottName
+								rowErrors = append(rowErrors, errorsTableDepartments, "1")
+
+								if len(allErrors) > 0 {
+									if !inArray2D(errorsTableDepartments, allErrors) {
+										allErrors = append(allErrors, rowErrors)
+									} else {
+										for i, v := range allErrors {
+											if v[0] == rowErrors[0] {
+												errorCounter, _ := strconv.Atoi(v[1])
+												errorCounter += 1
+												allErrors[i][1] = strconv.Itoa(errorCounter)
+											}
+										}
+									}
+								} else {
+									allErrors = append(allErrors, rowErrors)
+								}
 							}
 
-							// if prev cell contians riposo and diff hour is less that 40 add red cell value
+							// if prev cell contains riposo and diff hour is less that 40 add red cell value
 							if strings.Contains(newFileValues[0][newCount - 1], "Riposo") && diff.Hours() < 40 {
 								redFont := xlsx.NewFont(10, "Verdana")
-								redFont.Color = "EC1111"
+								redFont.Color = "FF0000"
 								redStyle := xlsx.NewStyle()
 								redStyle.Font = *redFont
 								cell.SetStyle(redStyle)
+
+								errorsTableDepartments := rowCityName + " - " + rowDepartName + " - " + rowSottName
+								rowErrors = append(rowErrors, errorsTableDepartments, "1")
+
+								dangerMsg("Errors -> ", false)
+								fmt.Println(rowErrors)
+
+								if len(allErrors) > 0 {
+									if !inArray2D(errorsTableDepartments, allErrors) {
+										allErrors = append(allErrors, rowErrors)
+									} else {
+										for i, v := range allErrors {
+											if v[0] == rowErrors[0] {
+												errorCounter, _ := strconv.Atoi(v[1])
+												errorCounter += 1
+												allErrors[i][1] = strconv.Itoa(errorCounter)
+											}
+										}
+									}
+								} else {
+									allErrors = append(allErrors, rowErrors)
+								}
 							}
 
 							// add cell value with highest time
@@ -378,6 +444,39 @@ func writeNewFile(excelFile, destination string) {
 		}
 	}
 
+	sheet1, err = file.AddSheet("Errors counter")
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+
+	footerStyle.Font = *footerFont
+
+	row1 = sheet1.AddRow()
+	cell1 = row1.AddCell()
+	cell1.Value = "CITY"
+	cell1 = row1.AddCell()
+	cell1.Value = "DEPART"
+	cell1 = row1.AddCell()
+	cell1.Value = "SOTT"
+	cell1 = row1.AddCell()
+	cell1.Value = "ERRORS NUMBER"
+
+	for _, v := range allErrors {
+		row1 = sheet1.AddRow()
+
+		first := []string{}
+		first = strings.Split(v[0],"-")
+
+		for _, cellValue := range first {
+			cell1 = row1.AddCell()
+			cell1.Value = strings.TrimSpace(cellValue)
+		}
+
+		cell1 = row1.AddCell()
+		cell1.Value = v[1]
+
+	}
+
 	// Start progress bar
 	y := color.New(color.FgHiYellow).SprintFunc()
 	bar := pb.StartNew(barCounter).Prefix(y("Writing new file... "))
@@ -402,7 +501,47 @@ func writeNewFile(excelFile, destination string) {
 	bar.Finish()
 	b := color.New(color.FgHiMagenta, color.Bold).SprintFunc()
 	fmt.Print(" -> File : ", b(preparedFile), " has been created!\n")
-	// Progress bar end
+	fmt.Print(" -> In sheet: ", b("All turns and errors"), " are all turns from file and in red are errors\n")
+	fmt.Print(" -> In sheet: ", b("Errors counter"), " are all founded errors\n")
+
+	mySignature := "| by Zorila Laurentiu |"
+	sig := "-----------------------------"
+
+	sigColor := color.New(color.FgHiCyan, color.Bold).SprintFunc()
+
+	for i:=0; i<31; i++ {
+		fmt.Print(" ")
+	}
+
+	for i := 0; i < 23; i++ {
+		fmt.Print(sigColor(string(sig[i])))
+		time.Sleep(time.Millisecond)
+	}
+
+	fmt.Print("\n")
+
+	for i:=0; i<16; i++ {
+		fmt.Print(" ")
+	}
+
+	for i:=0; i<len(mySignature); i++  {
+		fmt.Print(sigColor(string(mySignature[i])))
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	fmt.Print("\n")
+
+	for i:=0; i<16; i++ {
+		fmt.Print(" ")
+	}
+
+	for i := 0; i < 23; i++ {
+		fmt.Print(sigColor(string(sig[i])))
+		time.Sleep(time.Millisecond)
+	}
+
+	fmt.Print("\n")
+
 
 	// Save file with new data
 	savedFile := destination + preparedFile
@@ -449,6 +588,7 @@ func countFromSheet(cel, row, totCells, header bool, file string) int {
 	}
 	return value
 }
+
 
 
 
