@@ -2,5 +2,27 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/VividCortex/ewma" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/asaskevich/govalidator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/cheggaaa/pb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/davecgh/go-spew" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/fatih/color" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/frankban/quicktest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/google/go-cmp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/klauspost/cpuid" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/kr/pretty" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/kr/text" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mattn/go-colorable" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mattn/go-isatty" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mattn/go-runewidth" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/pmezard/go-difflib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/shirou/gopsutil" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/stretchr/testify" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/tealeg/xlsx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/zcalusic/sysinfo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/sys" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/xerrors" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/check.v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/yaml.v2" vcs="Git" />
   </component>
 </project>

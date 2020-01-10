@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9f1f676-2dad-4220-a0f6-ff0b624ad02f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/alerts.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/alerts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/bin/calculate-diff-hours-.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/bin/hours-diff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/example file/Book1New.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/func.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/func.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/license.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/license.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test.go" afterDir="false" />
     </list>
@@ -22,30 +26,6 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>sheetCounter</find>
-      <find>arrValues</find>
-      <find>validStatus</find>
-      <find>checkArr</find>
-      <find>RFC3339FullDate</find>
-      <find>dateAndTime</find>
-      <find>not f</find>
-      <find>fm</find>
-      <find>fmt</find>
-      <find>string</find>
-      <find>firstDateCol</find>
-      <find>Starting to prepare new file...</find>
-      <find>Output</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>countFromSheet</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>C:\Projects\GoLang\testGoLang\src\main</dir>
-      <dir>$PROJECT_DIR$/src/main</dir>
-    </dirStrings>
-  </component>
   <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -55,10 +35,17 @@
     <option name="width" value="826" />
     <option name="height" value="821" />
   </component>
+  <component name="ProjectId" id="1W72SmJiWjNQTq1DAsy6GH5ADRE" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
@@ -67,6 +54,9 @@
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.dep.integrator" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -100,5 +90,11 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="437" y="243" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578490841849">
+      <screen x="0" y="23" width="1440" height="821" />
+    </state>
+    <state x="437" y="243" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.821@0.23.1440.821" timestamp="1578490841849" />
   </component>
 </project>

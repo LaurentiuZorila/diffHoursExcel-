@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-const newValidStatus string = "IN FORZA"
 
 // check if is a empty string
 func isEmptyString(s string) bool {
@@ -65,7 +64,7 @@ func checkValidColumns (str string) bool {
 // Check if column "stato" is "in forza"
 func checkArr(arr[]string, col int) bool {
 	if len(arr) > 0 {
-		if arr[col] == newValidStatus {
+		if arr[col] == validStatus {
 			return true
 		}
 	}
@@ -122,7 +121,7 @@ func checkAnswers(str string) (string, bool) {
 	messages := [3]string{
 		" -> Enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
 		" -> Please enter path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
-		" -> MotherFucker insert path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
+		" -> MotherFucker :-))))) insert path and file name (ex: C:/user/desktop/etc/file.xlsx): ",
 	}
 
 	if len(strings.Trim(str, "")) == 0 {

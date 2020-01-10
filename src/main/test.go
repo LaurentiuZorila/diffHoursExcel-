@@ -5,7 +5,6 @@ import (
 	"github.com/cheggaaa/pb"
 	"github.com/fatih/color"
 	"github.com/tealeg/xlsx"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -40,16 +39,8 @@ type fileHelper struct {
 
 func main() {
 
-	fileModified := lastDateModified(path() + fileSerialKey)
-	fileKeyLic := readFile(path() + fileSerialKey)
-	fileKeyLic = decode(fileKeyLic)
-	fileKeyLicArray := strings.Split(fileKeyLic, "___")
+	install()
 
-	fmt.Println("fileModified -> ", fileModified)
-	fmt.Println("fileKeyLicArray[1] -> ", fileKeyLicArray[1])
-
-
-	os.Exit(3)
 	filePath, destinationPath, initError := runInit()
 
 	if !initError {
@@ -509,7 +500,7 @@ func writeNewFile(excelFile, destination string) {
 
 	sigColor := color.New(color.FgHiCyan, color.Bold).SprintFunc()
 
-	for i:=0; i<31; i++ {
+	for i:=0; i<16; i++ {
 		fmt.Print(" ")
 	}
 

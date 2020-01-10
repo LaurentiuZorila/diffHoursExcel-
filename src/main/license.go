@@ -21,6 +21,10 @@ func createFile(key string) {
 		fmt.Println(err)
 		return
 	}
+	dateCreated := getFileModifiedDate(f.Name())
+	key = dateCreated + key
+	key = encode(key)
+
 	_, err = f.WriteString(key)
 	if err != nil {
 		fmt.Println(err)
@@ -61,8 +65,7 @@ func getFileModifiedDate(filename string) string {
 		fmt.Println(err)
 	}
 
-	modifiedTime := file.ModTime().String()
-
+	modifiedTime := file.ModTime().Format("2 Jan 2006 15:04")
 	return modifiedTime
 }
 
@@ -81,13 +84,13 @@ func getUserInfo() string {
 
 func generateSerial(key string) string {
 	if len(strings.TrimSpace(key)) > 0 {
-		return getCpuInfo() + getUserInfo() + "____" + key
+		return "___" + getCpuInfo() + getUserInfo() + "____" + key
 	}
-	return getCpuInfo() + getUserInfo() + "____"
+	return "___" + getCpuInfo() + getUserInfo() + "____"
 }
 
 func salt() string {
-	now := time.Now().String()
+	now := time.Now().AddDate(0,3,0).String()
 	return now
 }
 
@@ -102,22 +105,43 @@ func decode(key string) string {
 }
 
 func updateLicense(key string) {
-	if decode(key) > salt() {
-		createFile(encode(generateSerial(key)))
+	k := decode(key)
+	if k > salt() {
+		infoMsg("Your license has been added successfully!", true)
+		createFile(generateSerial(k))
 	}
+	infoMsg("Your license key is not valid!", true)
 	return
 }
 
 func install()  {
-	key := ""
 	_, err := os.Stat(getPath() + licFile)
 	if err == nil {
 		licenseKey := readFile()
+		licenseKey = decode(licenseKey)
 		licenseKeyArr := strings.Split(licenseKey, "___")
 
+
+		if !strings.Contains(licenseKey, "___") {
+			infoMsg("The key is not valid!", true)
+			newKey := ""
+			infoMsg("You need to update your license, please insert new key: ", true)
+			fmt.Scan(&newKey)
+			if len(strings.TrimSpace(newKey)) == 0 {
+				for i:=3;i>0;i-- {
+					infoMsg("Remaining attempts: " + strconv.Itoa(i) + "You need to update your license, please insert new key: ", true)
+					fmt.Scan(&newKey)
+					if len(strings.TrimSpace(newKey)) > 0 {
+						updateLicense(newKey)
+					}
+				}
+			}
+			return
+		}
+
 		// check if license is valid
-		if decode(strings.TrimSpace(licenseKeyArr[0])) == generateSerial("") {
-			if decode(licenseKeyArr[1]) < salt() {
+		if decode(strings.TrimSpace(licenseKeyArr[1])) == generateSerial("") {
+			if decode(licenseKeyArr[2]) < salt() {
 				newKey := ""
 				infoMsg("You need to update your license, please insert new key: ", true)
 				fmt.Scan(&newKey)
@@ -134,10 +158,22 @@ func install()  {
 		}
 
 	} else {
-		createFile(encode(generateSerial(key)))
+		newKey := ""
+		infoMsg("Insert license key: ", true)
+		fmt.Scan(&newKey)
+		if len(strings.TrimSpace(newKey)) == 0 {
+			for i:=3;i>0;i-- {
+				infoMsg("Remaining attempts: " + strconv.Itoa(i) + "Insert license key: ", true)
+				fmt.Scan(&newKey)
+				if len(strings.TrimSpace(newKey)) > 0 {
+					newKey = decode(newKey)
+					createFile(encode(generateSerial(newKey)))
+				}
+			}
+		} else {
+			newKey = decode(newKey)
+			createFile(generateSerial(newKey))
+		}
+
 	}
-
-
-	infoMsg(" -> Please enter key license: ", true)
-	fmt.Scanln(&key)
 }
